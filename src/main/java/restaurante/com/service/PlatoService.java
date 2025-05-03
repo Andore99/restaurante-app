@@ -3,6 +3,7 @@ package restaurante.com.service;
 import restaurante.com.model.Plato;
 import restaurante.com.repository.PlatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class PlatoService {
         return repository.findAll();
     }
 
+    @Retryable(value = RuntimeException.class, maxAttempts = 3)
     public Plato guardarPlato(Plato plato) {
         if (plato == null) {
             throw new IllegalArgumentException("El plato no puede ser nulo");
